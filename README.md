@@ -10,6 +10,47 @@ System Architecture & Tech Stack
 •	Data Ingestion: 6-tier YAML semantic index strictly grounded in official EU CELEX legal databases.
 •	AI Integration: Configured for local Large Language Models (LLMs) like Qwen 2.5 and Mistral Nemo via Model Context Protocol (MCP).
 •	Infrastructure: Docker, Cloudflare DNS, Local Navidrome server integration for private cloud synchronization via Syncthing.
+
+### 🔍 Code Snapshot: Security & Access Governance
+Below is a brief snippet demonstrating the core B2B security logic from `app_hub.py`. In this public showcase, actual production keys and client tokens have been strictly redacted to ensure zero data leakage, demonstrating secure coding practices.
+
+```python
+import os
+
+# =====================================================================
+# SYSTEM SECURITY & B2B LICENSE GOVERNANCE
+# =====================================================================
+
+# 1. Primary Master Key (Secured via Environment Variable)
+MASTER_KEY_1 = os.getenv("MASTER_KEY_PROVA_LEGAL", "DEFAULT_SECURE_FALLBACK")
+
+# 2. Hardcoded Subsidiary Master Key (Anti-lockout failsafe)
+MASTER_KEY_2 = "[REDACTED_FAILSAFE_KEY_FOR_SECURITY]"
+
+# 3. Client Access Tiers
+CHAVES_ACESSO = {
+    "[REDACTED_CLIENT_TOKEN_1]": "SUITE_1",
+    "[REDACTED_CLIENT_TOKEN_2]": "SUITE_2",
+}
+
+def validar_licenca_api(chave):
+    """
+    Validates the provided license key against administrative and client tiers,
+    granting appropriate system access levels for compliance tool suites.
+    """
+    chave = chave.strip()
+    
+    # Administrative validation allowing access via primary OR subsidiary key
+    if chave == MASTER_KEY_1 or chave == MASTER_KEY_2:
+        return "MASTER", "✅ Administrative Access Granted."
+        
+    # Client tier validation
+    if chave in CHAVES_ACESSO:
+        nivel = CHAVES_ACESSO[chave]
+        return nivel, f"✅ License confirmed. {nivel} tier unlocked."
+        
+    return None, "❌ License Error: Invalid or unrecognized key."
+
 Business Value (Why it matters)
 •	Risk Mitigation: Ensures precise legal answers grounded only in official CELEX data, avoiding AI hallucinations.
 •	Data Privacy: By utilizing local LLM deployment and MCP, sensitive corporate prompts and data never leave the internal network, ensuring absolute GDPR and NDA compliance.
