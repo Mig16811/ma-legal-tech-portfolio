@@ -51,6 +51,8 @@ def validar_licenca_api(chave):
         
     return None, "❌ License Error: Invalid or unrecognized key."
 
+```
+
 Business Value (Why it matters)
 •	Risk Mitigation: Ensures precise legal answers grounded only in official CELEX data, avoiding AI hallucinations.
 •	Data Privacy: By utilizing local LLM deployment and MCP, sensitive corporate prompts and data never leave the internal network, ensuring absolute GDPR and NDA compliance.
